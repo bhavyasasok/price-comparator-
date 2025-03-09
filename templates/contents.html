@@ -1,0 +1,143 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block content %}
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(to bottom, #b1c3ca, #FFC0CB, #FFF5E1);
+            position: relative; /* Ensures stacking works correctly */
+            overflow-x: hidden;
+        }
+
+
+        .card { font-size: 13px; }
+
+        /* Filter Button */
+        .filter-btn {
+            position: fixed;
+            top: 85px;
+            left: 100px;
+            background: #3A6B7E;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+            z-index: 1000;
+        }
+
+        .filter-btn:hover {
+            background: #143541;
+        }
+
+        /* Dropdown Filter */
+        .filter-dropdown {
+            position: fixed;  /* Ensures it stays visible */
+            top: 130px; /* Adjust to prevent overlap */
+            left: 100px; /* Align with filter button */
+            background: white;
+            border: 1px solid #ccc;
+            padding: 15px;
+            z-index: 9999; /* Ensures dropdown stays on top */
+            display: none;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+
+        .show {
+            display: block;
+        }
+
+        /* Button Styling */
+        .btn-outline-secondary {
+            color: #212529;
+            background-color: #fff;
+            border-color: #ABCCD8;
+        }
+
+        .btn-outline-secondary:hover {
+            color: #212529;
+            background-color: #66A1B8;
+            border-color: #66A1B8;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- Filter Toggle Button -->
+<button id="filter-btn" class="filter-btn">📊 Filter</button>
+<div id="filter-dropdown" class="filter-dropdown">
+    <form method="get" action="{% url 'contents' %}">
+        <h2>Item</h2>
+        <input type="text" placeholder="Item" name="q">
+        <h2>Stores</h2>
+        <input type="checkbox" name="Tesco"> Tesco<br>
+        <input type="checkbox" name="Waitrose"> Waitrose<br>
+        <input type="checkbox" name="Morrisons"> Morrisons<br>
+        <input type="checkbox" name="Sainsburys"> Sainsbury's<br>
+        <h2>Price</h2>
+        <input type="text" placeholder="Min" name="min_price" size="5"> -
+        <input type="text" placeholder="Max" name="max_price" size="5"><br><br>
+        <button type="submit">Apply</button>
+    </form>
+</div>
+
+<!-- Search Bar (Moved to Top Right) -->
+<div style="position: absolute; top: 75px; right: 100px;">
+    {% include 'searchbar.html' %}
+</div>
+
+<br><br>
+<div class="row">
+    {% for product in products %}
+    <div class="col-sm-3 my-4 card-deck">
+        <div class="card">
+            <img class="card-img-top" src="{{ product.imageURL }}" alt="{{ product.name }}">
+            <div class="card-body">
+                <h6 class="card-title"><strong>{{ product.store }}</strong></h6>
+                <hr>
+                <p class="card-text">{{ product.name }}</p>
+            </div>
+            <div class="card-footer">
+                <h5><strong>₹{{ product.price_inr }}</strong></h5>
+                {% if product.id in items %}
+                    <button data-product="{{ product.id }}" data-action="remove" class="btn btn-outline-secondary btn-sm update-cart">-</button>
+                    <p style="display: inline"><strong>{{ items|get_item:product.id }}</strong></p>
+                    <button data-product="{{ product.id }}" data-action="add" class="btn btn-outline-secondary btn-sm update-cart">+</button>
+                {% else %}
+                    <button data-product="{{ product.id }}" data-action="add" class="btn btn-outline-secondary btn-sm update-cart">Add To Basket</button>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- JavaScript to Toggle Filter -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const filterButton = document.getElementById("filter-btn");
+        const filterDropdown = document.getElementById("filter-dropdown");
+
+        filterButton.addEventListener("click", function(event) {
+            event.stopPropagation(); // Prevents event from reaching document click listener
+            filterDropdown.classList.toggle("show");
+        });
+
+        // Close filter when clicking outside
+        document.addEventListener("click", function(event) {
+            if (!filterDropdown.contains(event.target) && !filterButton.contains(event.target)) {
+                filterDropdown.classList.remove("show");
+            }
+        });
+    });
+</script>
+
+</body>
+
+{% endblock content %}

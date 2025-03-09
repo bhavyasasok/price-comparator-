@@ -1,0 +1,232 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block content %}
+
+<head>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            --transition: 0.3s ease-in-out;
+            --border-radius: 0.5rem;
+        }
+
+        /* Background & Particles */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(to bottom, #AEC6CF, #FFC0CB, #FFF5E1);
+            position: relative; /* Ensures stacking works correctly */
+            overflow-x: hidden;
+        }
+
+        /* Particle Animation Background */
+        #particles-js {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        /* Navbar */
+        .navbar {
+            background: linear-gradient(to bottom #6032c2, #c344e0);
+            padding: 5px 20px;  /* Reduced padding for better fit */
+            text-align: center;  /* Center the navbar links */
+            font-size: 1rem;  /* Adjust font size */
+        }
+
+        .navbar a {
+            color: white !important;
+            font-weight: bold;
+            font-size: 1rem;  /* Adjust font size */
+            margin-right: 15px;  /* Space out links */
+            text-decoration: none;
+        }
+
+        .navbar a:hover {
+            text-decoration: underline;  /* Add underline on hover */
+        }
+
+        /* Page Container */
+        .content-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Title Styling */
+        .title {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #3A3B3C;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+            letter-spacing: 2px;
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        /* Store Selection */
+        .store-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            width: 80%;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Store Box */
+        .store-box {
+            width: 280px;
+            height: 230px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            background: white;
+            transition: transform var(--transition);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+        }
+
+        .store-box:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 18px rgba(0, 0, 0, 0.3);
+        }
+
+        label {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        label img {
+            width: 80%;
+            height: auto;
+        }
+
+        /* Hide Checkboxes */
+        input[type="checkbox"] {
+            display: none;
+        }
+
+        /* Apply Button */
+        .btn-apply {
+            background-color: #82abc4;
+            color: white;
+            font-size: 1rem;
+            font-weight: bold;
+            padding: 12px 24px;
+            border-radius: 8px;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+            display: block;
+            margin: 30px auto 0;
+        }
+
+        .btn-apply:hover {
+            background: #8B5CF6;
+        }
+    </style>
+</head>
+
+<!-- Particle Background -->
+<div id="particles-js"></div>
+
+<!-- Removed the duplicate navbar that was present in the main.html file -->
+<!-- Only one navbar remains here -->
+
+<div class="content-container">
+    <!-- Title -->
+    <div class="title">PRICEWISE</div>
+
+    <!-- Store Selection -->
+    <form method="get" action="{% url 'contents' %}">
+        <div class="store-container">
+            <div class="store-box">
+                <input type="checkbox" id="Tesco" name="Tesco" {% if Tesco %}checked{% endif %}>
+                <label for="Tesco">
+                    <img src="{% static 'images/Tesco logo.png' %}" alt="Tesco">
+                </label>
+            </div>
+
+            <div class="store-box">
+                <input type="checkbox" id="Morrisons" name="Morrisons" {% if Morrisons %}checked{% endif %}>
+                <label for="Morrisons">
+                    <img src="{% static 'images/Morrisons logo.png' %}" alt="Morrisons">
+                </label>
+            </div>
+
+            <div class="store-box">
+                <input type="checkbox" id="Waitrose" name="Waitrose" {% if Waitrose %}checked{% endif %}>
+                <label for="Waitrose">
+                    <img src="{% static 'images/Waitrose logo.png' %}" alt="Waitrose">
+                </label>
+            </div>
+
+            <div class="store-box">
+                <input type="checkbox" id="Sainsburys" name="Sainsburys" {% if Sainsburys %}checked{% endif %}>
+                <label for="Sainsburys">
+                    <img src="{% static 'images/Sainsburys logo.png' %}" alt="Sainsbury's">
+                </label>
+            </div>
+        </div>
+
+        <button type="submit" class="btn-apply">Apply</button>
+    </form>
+</div>
+
+<!-- Load Particles.js -->
+<script src="{% static 'js/particles.min.js' %}"></script>
+<script>
+    particlesJS("particles-js", {
+        "particles": {
+            "number": { "value": 50, "density": { "enable": true, "value_area": 800 } },
+            "color": { "value": "#ffffff" },
+            "shape": {
+                "type": "circle",
+                "stroke": { "width": 0, "color": "#000000" },
+                "polygon": { "nb_sides": 5 }
+            },
+            "opacity": { "value": 0.5 },
+            "size": { "value": 3, "random": true },
+            "line_linked": {
+                "enable": true,
+                "distance": 150,
+                "color": "#ffffff",
+                "opacity": 0.4,
+                "width": 1
+            },
+            "move": {
+                "enable": true,
+                "speed": 3,
+                "direction": "none",
+                "out_mode": "out"
+            }
+        },
+        "interactivity": {
+            "detect_on": "canvas",
+            "events": {
+                "onhover": { "enable": true, "mode": "grab" },
+                "onclick": { "enable": true, "mode": "push" }
+            }
+        },
+        "retina_detect": true
+    });
+</script>
+
+{% endblock content %}

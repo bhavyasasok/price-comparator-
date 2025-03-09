@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+  font-family: Arial;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.searchbar-container {
+  display: flex;
+  justify-content: flex-end; /* Align search bar to the right */
+  padding: 10px;
+}
+
+form.searchbar {
+  display: flex;
+  width: 400px; /* Fixed width */
+  border: 1px solid grey;
+  border-radius: 5px;
+  overflow: hidden; /* Ensures elements stay inside */
+}
+
+form.searchbar input[type="text"] {
+  flex: 1;
+  padding: 10px;
+  font-size: 15px;
+  border: none;
+  background: #f1f1f1;
+  outline: none; /* Removes focus outline */
+}
+
+form.searchbar button {
+  padding: 10px 15px;
+  background: #3A6B7E;
+  color: white;
+  font-size: 15px;
+  border: none;
+  cursor: pointer;
+}
+
+form.searchbar button:hover {
+  background: #143541;
+}
+
+</style>
+</head>
+<body>
+
+<!-- Container to align search bar to the right -->
+<div class="searchbar-container">
+  <form class="searchbar" method="get" action="{% url 'contents' %}">
+    <input type="text" placeholder="What are you looking for?" name="q">
+    <button type="submit">Search</button>
+  </form>
+</div>
+
+</body>
+</html>
